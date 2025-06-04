@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hasil Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .hasil-container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      max-width: 400px;
+      text-align: center;
+    }
+    .hasil-container h2 {
+      color: #c2185b;
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .info-kiri p {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin: 8px 0;
+      color: #444;
+      text-align: left; /* rata kiri */
+    }
+    /* styling tombol */
+    button.kembali-btn {
+      margin-top: 25px;
+      padding: 12px 25px;
+      font-size: 1rem;
+      color: white;
+      background-color: #c2185b;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: background-color 0.3s ease;
+    }
+    button.kembali-btn:hover {
+      background-color: #9b1650;
+    }
+    /* styling icon rumah */
+    .icon-rumah {
+      width: 20px;
+      height: 20px;
+      fill: white;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="hasil-container">
+    <h2>Nilai Kamu: <span id="nilaiAkhir"></span></h2>
+    
+    <div class="info-kiri">
+      <p>Nama: <span id="hasilNama"></span></p>
+      <p>Kelas: <span id="hasilKelas"></span></p>
+      <p>Mata Pelajaran: <span id="hasilMapel"></span></p>
+    </div>
+
+    <button class="kembali-btn" onclick="location.href='login.html'">
+      <svg class="icon-rumah" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" >
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+      Kembali ke Beranda
+    </button>
+  </div>
+
+  <script>
+    // Ambil hasil dari localStorage
+    const nilai = localStorage.getItem('hasilNilai') || 'Tidak tersedia';
+    const nama = localStorage.getItem('hasilNama') || 'Tidak tersedia';
+    const kelas = localStorage.getItem('hasilKelas') || 'Tidak tersedia';
+    const mapel = localStorage.getItem('hasilMapel') || 'Tidak tersedia';
+
+    document.getElementById('nilaiAkhir').textContent = nilai;
+    document.getElementById('hasilNama').textContent = nama;
+    document.getElementById('hasilKelas').textContent = kelas;
+    document.getElementById('hasilMapel').textContent = mapel;
+  </script>
+</body>
+</html>

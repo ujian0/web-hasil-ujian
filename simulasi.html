@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simulasi Ujian</title>
+  <style>
+    /* Background gradient sama seperti halaman ujian */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 16px 24px;
+      border-bottom: 1px solid #ddd;
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 16px 16px 0 0;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px 30px 30px 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+
+    /* Popup notif */
+    .popup-notif {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      display: none; /* default hidden */
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 24px 32px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      max-width: 300px;
+      text-align: center;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .popup-content button {
+      margin-top: 16px;
+      padding: 10px 20px;
+      background: #ff758c;
+      border: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .popup-content button:hover {
+      background: #ff517a;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    .identitas {
+      font-weight: 600;
+      color: #444;
+      font-size: 1rem;
+    }
+
+    #timer {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ff758c;
+      background: #ffccd1;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      box-shadow: 0 4px 8px rgba(255, 117, 140, 0.3);
+      user-select: none;
+    }
+
+    .soal {
+      margin-bottom: 28px;
+    }
+
+    .soal h3 {
+      color: #444;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    label {
+      display: block;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      background: #f0f0f0;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s, box-shadow 0.3s;
+      user-select: none;
+    }
+
+    input[type="radio"] {
+      margin-right: 12px;
+      cursor: pointer;
+    }
+
+    label:hover {
+      background: #ffe3e8;
+      box-shadow: 0 0 8px #ff7b9b;
+    }
+
+    input[type="radio"]:checked + label,
+    input[type="radio"]:checked {
+      background: #ff7eb3;
+      color: white;
+      box-shadow: 0 0 8px #ff7eb3;
+    }
+
+    .btn-selesai {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #ff758c, #ff7eb3);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-selesai:hover {
+      background: linear-gradient(90deg, #ff6a88, #ff99ac);
+    }
+
+    .hasil {
+      text-align: center;
+      background: #fce4ec;
+      margin-top: 40px;
+      padding: 24px;
+      border-radius: 12px;
+      display: none;
+      color: #c2185b;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 12px rgba(194, 41, 87, 0.3);
+    }
+
+    .hasil h2 {
+      margin-bottom: 16px;
+      font-size: 2rem;
+    }
+
+    .hasil p {
+      font-size: 1.1rem;
+      margin: 4px 0;
+      color: #555;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="identitas">
+        <div>Nama: <span id="namaPeserta"></span></div>
+        <div>Kelas: <span id="kelasPeserta"></span></div>
+        <div>Mapel: <span id="mapelPeserta"></span></div>
+      </div>
+      <div id="timer">--:--</div>
+    </header>
+
+    <!-- Soal Dummy -->
+    <div class="soal" data-kunci="b">
+      <h3>1. Ibukota Indonesia adalah...</h3>
+      <label><input type="radio" name="soal1" value="a" id="s1a"><span for="s1a"> Bandung</span></label>
+      <label><input type="radio" name="soal1" value="b" id="s1b"><span for="s1b"> Jakarta</span></label>
+      <label><input type="radio" name="soal1" value="c" id="s1c"><span for="s1c"> Surabaya</span></label>
+    </div>
+
+    <div class="soal" data-kunci="c">
+      <h3>2. 2 + 2 × 2 =</h3>
+      <label><input type="radio" name="soal2" value="a" id="s2a"><span for="s2a"> 6</span></label>
+      <label><input type="radio" name="soal2" value="b" id="s2b"><span for="s2b"> 8</span></label>
+      <label><input type="radio" name="soal2" value="c" id="s2c"><span for="s2c"> 6</span></label>
+    </div>
+
+    <div class="soal" data-kunci="a">
+      <h3>3. Warna bendera Indonesia adalah...</h3>
+      <label><input type="radio" name="soal3" value="a" id="s3a"><span for="s3a"> Merah Putih</span></label>
+      <label><input type="radio" name="soal3" value="b" id="s3b"><span for="s3b"> Hijau Kuning</span></label>
+      <label><input type="radio" name="soal3" value="c" id="s3c"><span for="s3c"> Biru Putih</span></label>
+    </div>
+
+    <button class="btn-selesai" onclick="selesaikanUjian()">Selesai</button>
+
+    <div class="hasil" id="hasilUjian">
+      <h2>Nilai Kamu: <span id="nilaiAkhir"></span></h2>
+      <p>Nama: <span id="hasilNama"></span></p>
+      <p>Kelas: <span id="hasilKelas"></span></p>
+      <p>Mata Pelajaran: <span id="hasilMapel"></span></p>
+    </div>
+  </div>
+
+  <!-- Popup notif -->
+  <div class="popup-notif" id="popupNotif">
+    <div class="popup-content">
+      <p>Waktu masih tersisa. Apakah kamu yakin ingin mengakhiri ujian?</p>
+      <button onclick="selesaikanUjian(true)">Ya, Selesai</button>
+      <button onclick="closePopup()">Batal</button>
+    </div>
+  </div>
+
+  <script>
+    // Ambil identitas dari localStorage
+    const nama = localStorage.getItem('pesertaNama') || "Tidak Ada";
+    const kelas = localStorage.getItem('pesertaKelas') || "Tidak Ada";
+    const mapel = localStorage.getItem('pesertaMapel') || "Tidak Ada";
+
+    document.getElementById('namaPeserta').textContent = nama;
+    document.getElementById('kelasPeserta').textContent = kelas;
+    document.getElementById('mapelPeserta').textContent = mapel;
+
+    // Timer
+    let totalSeconds = 100; // 100 detik = 1 menit 40 detik
+    const timerEl = document.getElementById('timer');
+    let timerInterval = setInterval(() => {
+      const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+      const s = (totalSeconds % 60).toString().padStart(2, '0');
+      timerEl.textContent = `${m}:${s}`;
+      totalSeconds--;
+
+      if (totalSeconds < 0) {
+        clearInterval(timerInterval);
+        selesaikanUjian(true);
+      }
+    }, 1000);
+
+    function selesaikanUjian(forced = false) {
+  if (!forced && totalSeconds > 0) {
+    document.getElementById('popupNotif').style.display = 'flex';
+    return;
+  }
+
+  clearInterval(timerInterval);
+  document.getElementById('popupNotif').style.display = 'none';
+
+  let skor = 0;
+  const soalEls = document.querySelectorAll('.soal');
+  soalEls.forEach(soal => {
+    const kunci = soal.getAttribute('data-kunci');
+    const jawaban = soal.querySelector('input[type="radio"]:checked');
+    if (jawaban && jawaban.value === kunci) {
+      skor += 1;
+    }
+  });
+
+  const nilai = Math.round((skor / soalEls.length) * 100);
+
+  // Simpan hasil ke localStorage
+  localStorage.setItem('hasilNilai', nilai);
+  localStorage.setItem('hasilNama', nama);
+  localStorage.setItem('hasilKelas', kelas);
+  localStorage.setItem('hasilMapel', mapel);
+
+  // Redirect ke halaman hasil
+  window.location.href = 'hasil.html';
+}
+
+  </script>
+</body>
+</html>
